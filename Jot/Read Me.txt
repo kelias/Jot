@@ -1,0 +1,15 @@
+﻿Thanks for taking a Look at Jot!
+
+
+BUILDING JOT----------------------------
+
+Before you build Jot install the font BIRTH OF A HERO.ttf. This is in Jot\trunk\src\Jot\Jot\Fonts
+
+Then just build in Visual Studio.
+
+
+NOTES-----------------------------------
+
+When you run Jot it will save your notes in the bin folder in a file called Notes.jot. 
+
+Enjoy, and please swing by http://jarloo.com/jot  to comment on this project!

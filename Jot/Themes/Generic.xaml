@@ -1,0 +1,178 @@
+﻿<!--  
+    Jarloo
+    http://jarloo.com
+ 
+    This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License  
+    http://creativecommons.org/licenses/by-sa/3.0/ 
+
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Converters="clr-namespace:Jarloo.Jot.Converters" 
+    xmlns:Controls1="clr-namespace:Jarloo.Jot.Controls">
+        
+    <!-- NoteControl-->
+    <Style TargetType="{x:Type Controls1:NoteControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls1:NoteControl}">
+                    <ControlTemplate.Resources>
+                        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                        <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+                        <Storyboard x:Key="MakeToolbarVisible">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="stackPanel">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.5"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="MakeToobarHidden">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="stackPanel">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+
+                    
+                    <Border x:Name="border" Background="{TemplateBinding Background}" >
+                        <Border.RenderTransform>
+                            <RotateTransform Angle="{Binding Path=Angle, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Border.RenderTransform>
+                        <Grid Margin="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="enter your notes here!" Margin="8,19.058,8,0" Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=txtNote}"
+                                       VerticalAlignment="Top" Foreground="#B43C1C26" HorizontalAlignment="Right"/>
+                            
+                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"
+                                        Margin="8,19.058,0,2.463" FontSize="11" AcceptsReturn="True" AcceptsTab="True" Visibility="Visible" Name="txtNote" BorderThickness="0" Background="{x:Null}"/>
+                            <WrapPanel Grid.Row="1" Margin="8,8,8,8">
+                                <TextBlock Text="{Binding Timestamp,StringFormat=\{0:MMM dd\, yyyy hh:mm tt\}}" Foreground="#B43C1C26" FontSize="10" />
+                            </WrapPanel>
+                            <StackPanel x:Name="stackPanel" Grid.Column="1" Margin="5,5,5,8" Grid.RowSpan="2" Opacity="0" >
+                                <Button Name="PART_DELETE">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <TextBlock Text="r" FontFamily="Marlett" FontSize="12"/>                                            
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.25"/>
+                        </Border.Effect>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True" SourceName="border">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard x:Name="MakeToobarHidden_BeginStoryboard" Storyboard="{StaticResource MakeToobarHidden}"/>
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource MakeToolbarVisible}"/>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--MoveableControl-->
+    <Style TargetType="{x:Type Controls1:MoveableControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls1:MoveableControl}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--StampControl-->
+    <Style TargetType="{x:Type Controls1:StampControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls1:StampControl}">
+                    <ControlTemplate.Resources>
+                        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                        <Storyboard x:Key="ShowBackground">
+                        	<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+                                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#33666666"/>
+                        	</ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="HideBackground">
+                        	<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+                                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#00666666"/>
+                        	</ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="MakeToolbarVisible">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="stackPanel">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.5"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="MakeToobarHidden">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="stackPanel">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+
+                    </ControlTemplate.Resources>
+                    
+                    <Border x:Name="border" BorderBrush="{x:Null}" BorderThickness="0" Background="#003D3D3D">
+                        <Border.RenderTransform>
+                            <RotateTransform Angle="{Binding Path=Angle, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Border.RenderTransform>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="enter stamp title here!" Margin="8,19.058,8,0" Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=txtStamp}" 
+                                       VerticalAlignment="Top" Foreground="#FF6A6A6A" HorizontalAlignment="Right" FontFamily="{TemplateBinding FontFamily}"  FontSize="{TemplateBinding FontSize}"/>
+                            
+                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" 
+                                     AcceptsReturn="True" AcceptsTab="True" Visibility="Visible" Name="txtStamp" BorderThickness="0" Background="{x:Null}" FontFamily="{TemplateBinding FontFamily}" 
+                                     FontSize="{TemplateBinding FontSize}" Margin="10,10,10,10"/>
+
+                            <StackPanel x:Name="stackPanel" Grid.Column="1" Margin="5,5,5,8" Grid.RowSpan="2" Opacity="0">
+                                <Button Name="PART_DELETE">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <TextBlock Text="r" FontFamily="Marlett" FontSize="12"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                	<ControlTemplate.Triggers>
+                		<Trigger Property="IsMouseOver" Value="True" SourceName="border">
+                			<Trigger.ExitActions>
+                				<BeginStoryboard Storyboard="{StaticResource HideBackground}"/>
+                                <BeginStoryboard Storyboard="{StaticResource MakeToobarHidden}"/>
+                			</Trigger.ExitActions>
+                			<Trigger.EnterActions>
+                				<BeginStoryboard Storyboard="{StaticResource ShowBackground}"/>
+                                <BeginStoryboard Storyboard="{StaticResource MakeToolbarVisible}"/>
+                			</Trigger.EnterActions>
+                		</Trigger>
+                	</ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
